@@ -30,6 +30,7 @@ import { MenuService } from './service/menu.service';
 import { MenuMapper } from './mapper/menu.mapper';
 import { Menu } from './entity/menu.entity';
 import { MenuController } from './controller/menu.controller';
+import { SnowflakeUtil } from './util/snowflake.util';
 
 
 @Module({
@@ -111,6 +112,11 @@ export class CoreModule implements OnModuleInit {
     private uploadManager: UploadManager,
   ) {}
   async onModuleInit() {
+    // 初始化 SnowflakeUtil
+    const workerId = parseInt(process.env.SNOWFLAKE_WORKER_ID || '1');
+    const datacenterId = parseInt(process.env.SNOWFLAKE_DATACENTER_ID || '1');
+    SnowflakeUtil.initialize(workerId, datacenterId);
+
     await this.userService.createInitialUser();
     await this.menuService.initializeMenus();
     console.log('Loaded JWT_SECRET:', JWT_SECRET);
