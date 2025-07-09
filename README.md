@@ -1,54 +1,117 @@
 # NestJS Core Module Workspace
 
-A monorepo workspace containing a reusable NestJS core module and example application.
+一个包含可重用 NestJS 核心模块和示例应用程序的 monorepo 工作区。
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```
 nest-core/
 ├── packages/
-│   └── nest-core/          # Core NestJS module package
+│   └── nest-core/          # 核心 NestJS 模块包
 ├── examples/
-│   └── nestjs-app/         # Example NestJS application
-├── pnpm-workspace.yaml     # PNPM workspace configuration
-└── package.json            # Root workspace configuration
+│   └── nestjs-app/         # 示例 NestJS 应用程序
+├── pnpm-workspace.yaml     # PNPM 工作区配置
+└── package.json            # 根工作区配置
 ```
 
-## 🚀 Quick Start
+## ✨ 核心功能
 
-### Prerequisites
+### @ilhamtahir/nest-core 模块提供：
+
+- 🔐 **完整的认证系统** - JWT 令牌认证，密码加密存储
+- 👥 **用户管理** - 用户 CRUD，角色分配，状态管理
+- 🛡️ **角色权限控制** - RBAC 权限模型，动态权限验证
+- 📋 **菜单管理** - 树形菜单结构，权限控制
+- 📁 **文件管理** - 本地/S3 文件上传，元数据管理
+- 🔧 **企业级工具** - Snowflake ID 生成器，全局异常处理
+- 🗄️ **数据库集成** - TypeORM + MySQL，自动表结构管理
+- 📝 **API 文档** - Swagger 自动生成文档
+
+## 🚀 快速开始
+
+### 环境要求
 
 - Node.js >= 18.0.0
 - PNPM >= 8.0.0
+- MySQL >= 5.7
 
-### Installation
+### 安装依赖
 
 ```bash
-# Install dependencies for all packages
+# 安装所有包的依赖
 pnpm install
 ```
 
-### Development
+### 配置数据库
+
+1. 创建 MySQL 数据库：
+```sql
+CREATE DATABASE nest_core_example CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+2. 在 `examples/nestjs-app/` 目录下创建 `.env` 文件：
+```env
+# 应用配置
+NODE_ENV=development
+PORT=3000
+
+# 数据库配置
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_NAME=nest_core_example
+
+# JWT 配置
+JWT_SECRET=your-super-secret-key
+JWT_EXPIRATION=7d
+```
+
+### 开发
 
 ```bash
-# Build the core package
+# 构建核心包
 pnpm build:core
 
-# Run the example application in development mode
+# 运行示例应用程序（开发模式）
 pnpm dev:example
 
-# Build all packages
+# 构建所有包
 pnpm build
 ```
 
-### Testing
+### 测试
 
 ```bash
-# Run tests for all packages
+# 运行所有包的测试
 pnpm test
 
-# Run tests for core package only
+# 仅运行核心包测试
 pnpm test:core
+```
+
+### 快速体验
+
+1. 启动示例应用：
+```bash
+pnpm dev:example
+```
+
+2. 使用默认管理员账户登录：
+   - 用户名: `admin`
+   - 密码: `123456`
+
+3. 获取 JWT 令牌：
+```bash
+curl -X POST http://localhost:3000/tokens \
+  -H "Content-Type: application/json" \
+  -d '{"identifier": "admin", "password": "123456"}'
+```
+
+4. 访问受保护的接口：
+```bash
+curl -X GET http://localhost:3000/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ## 📦 Packages
@@ -127,16 +190,43 @@ pnpm release
 - `pnpm version-packages` - Version packages
 - `pnpm release` - Build and publish packages
 
-## 🌐 API Endpoints (Example App)
+## 🌐 API 接口（示例应用）
 
-When running the example app, the following endpoints are available:
+运行示例应用时，可以访问以下接口：
 
-- `GET /` - Hello message from core package
-- `GET /app` - Hello message from example app
-- `GET /info` - Detailed information from core package
-- `GET /core` - Core package hello endpoint
-- `GET /core/version` - Core package version
-- `GET /core/info` - Core package detailed info
+### 🔐 认证接口
+- `POST /tokens` - 用户登录获取 JWT 令牌
+
+### 👥 用户管理接口
+- `GET /users` - 获取用户列表（分页）
+- `POST /users` - 创建新用户
+- `GET /users/{id}` - 获取用户详情
+- `PUT /users/{id}` - 更新用户信息
+- `DELETE /users/{id}` - 删除用户
+- `PUT /users/{id}/roles` - 设置用户角色
+
+### 🛡️ 角色管理接口
+- `GET /roles` - 获取角色列表（分页）
+- `POST /roles` - 创建新角色
+- `GET /roles/{id}` - 获取角色详情
+- `PUT /roles/{id}` - 更新角色信息
+- `DELETE /roles/{id}` - 删除角色
+- `PUT /roles/{id}/menus` - 分配角色菜单权限
+
+### 📋 菜单管理接口
+- `GET /menu` - 获取菜单列表（分页）
+- `GET /menu/tree` - 获取菜单树结构
+- `GET /menu/user-menus` - 获取当前用户菜单
+- `POST /menu` - 创建新菜单
+- `GET /menu/{id}` - 获取菜单详情
+- `PUT /menu/{id}` - 更新菜单信息
+- `DELETE /menu/{id}` - 删除菜单
+
+### 📁 文件管理接口
+- `POST /files/upload` - 简单文件上传
+- `POST /files/init` - 初始化分片上传
+- `POST /files/{id}/finish` - 完成文件上传
+- `GET /files/{id}` - 获取文件信息
 
 ## 📝 Publishing
 
@@ -166,15 +256,99 @@ pnpm version-packages
 pnpm release
 ```
 
-## 🤝 Contributing
+## 🔧 环境变量配置
 
-1. Make your changes
-2. Add tests if necessary
-3. Run `pnpm test` to ensure all tests pass
-4. Run `pnpm lint` to check code style
-5. Add a changeset with `pnpm changeset`
-6. Submit a pull request
+在使用 `@ilhamtahir/nest-core` 时，需要在项目根目录创建 `.env` 文件：
 
-## 📄 License
+```env
+# 应用配置
+NODE_ENV=development
+PORT=3000
 
-MIT
+# 数据库配置（必需）
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_NAME=your_database
+
+# JWT 配置
+JWT_SECRET=your-super-secret-key
+JWT_EXPIRATION=7d
+
+# Snowflake ID 配置（可选）
+SNOWFLAKE_WORKER_ID=1
+SNOWFLAKE_DATACENTER_ID=1
+
+# 文件上传配置
+UPLOAD_DIR=uploads
+
+# AWS S3 配置（可选）
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-bucket-name
+```
+
+## 🚀 在新项目中使用
+
+### 1. 安装包
+
+```bash
+npm install @ilhamtahir/nest-core
+# 或
+pnpm add @ilhamtahir/nest-core
+```
+
+### 2. 导入模块
+
+```typescript
+// src/app.module.ts
+import { Module } from '@nestjs/common';
+import { CoreModule } from '@ilhamtahir/nest-core';
+
+@Module({
+  imports: [CoreModule],
+})
+export class AppModule {}
+```
+
+### 3. 配置环境变量
+
+创建 `.env` 文件并配置数据库连接等信息。
+
+### 4. 启动应用
+
+```bash
+npm run start:dev
+```
+
+应用启动后会自动：
+- 创建数据库表结构
+- 初始化管理员账户（admin/123456）
+- 创建默认菜单结构
+
+## 🤝 贡献指南
+
+1. Fork 本仓库
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+### 开发流程
+
+1. 修改代码
+2. 添加必要的测试
+3. 运行 `pnpm test` 确保所有测试通过
+4. 运行 `pnpm lint` 检查代码风格
+5. 使用 `pnpm changeset` 添加变更记录
+6. 提交 Pull Request
+
+## 📄 许可证
+
+MIT License
+
+---
+
+**@ilhamtahir/nest-core** - 企业级 NestJS 核心模块，让后端开发更简单！ 🚀
