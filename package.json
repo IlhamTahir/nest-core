@@ -1,0 +1,33 @@
+{
+  "name": "nest-core-workspace",
+  "version": "0.0.1",
+  "description": "NestJS Core Module Workspace",
+  "author": "IlhamTahir",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:core": "pnpm --filter @ilhamtahir/nest-core build",
+    "build:example": "pnpm --filter nestjs-example build",
+    "dev:example": "pnpm --filter nestjs-example dev",
+    "start:example": "pnpm --filter nestjs-example start",
+    "test": "pnpm -r test",
+    "test:core": "pnpm --filter @ilhamtahir/nest-core test",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "clean": "pnpm -r clean",
+    "publish:core": "pnpm --filter @ilhamtahir/nest-core publish",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build:core && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
