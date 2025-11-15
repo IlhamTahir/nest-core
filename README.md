@@ -39,7 +39,7 @@ nest-core/
 
 ```bash
 # 安装所有包的依赖
-pnpm install
+pnpm install 
 ```
 
 ### 配置数据库

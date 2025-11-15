@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateTokenRequest } from '../dto/create-token.request';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { TokenVo } from '../vo/token.vo';
 import { JWT_SECRET } from '../constants/jwt';
 import { User } from '../entity/user.entity';
