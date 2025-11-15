@@ -14,7 +14,7 @@ import { BizException } from '../exception/biz.exception';
 import { menuError } from '../error/menu.error';
 import { UpdateMenuRequest } from '../dto/update-menu.request';
 import { MenuType } from '../enum/menu-type.enum';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class MenuService {

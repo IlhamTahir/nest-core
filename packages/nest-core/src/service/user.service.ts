@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entity/user.entity';
 import { Repository, In } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { SearchUserFilter } from '../dto/search-user.filter';
 import { JwtPayload } from 'jsonwebtoken';
 import { CreateUserRequest } from '../dto/create-user.request';

@@ -8,7 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthService } from './service/auth.service';
-import { JWT_EXPIRATION, JWT_SECRET } from './constants/jwt';
+import { JWT_EXPIRATION, JWT_SECRET } from './constants';
 import { RoleController } from './controller/role.controller';
 import { RoleService } from './service/role.service';
 import { Role } from './entity/role.entity';
@@ -35,54 +35,6 @@ import { SwaggerService } from './service/swagger.service';
 import { CoreModuleConfig, mergeCoreConfig } from './config/core.config';
 import { mergeSwaggerConfig } from './config/swagger.config';
 
-// 临时导入 CourseModule 实体以解决 TypeORM 扫描问题
-let CourseModuleEntities: any[] = [];
-try {
-  console.log('Attempting to load CourseModule entities from:', process.cwd());
-
-  // 尝试多个可能的路径
-  const possiblePaths = [
-    process.cwd() + '/dist/course/entity',
-    process.cwd() + '/src/course/entity',
-    '/private/var/workspace/yili-bili/backend/dist/course/entity',
-    '/private/var/workspace/yili-bili/backend/src/course/entity'
-  ];
-
-  let loadedEntities = [];
-  for (const basePath of possiblePaths) {
-    try {
-      const { Media } = require(basePath + '/media.entity');
-      const { CourseEntity } = require(basePath + '/course.entity');
-      const { LessonEntity } = require(basePath + '/lesson.entity');
-      const { ActivityEntity } = require(basePath + '/activity.entity');
-      const { VideoActivityEntity } = require(basePath + '/video-activity.entity');
-      const { TextActivityEntity } = require(basePath + '/text-activity.entity');
-      const { DocActivityEntity } = require(basePath + '/doc-activity.entity');
-
-      loadedEntities = [
-        Media,
-        CourseEntity,
-        LessonEntity,
-        ActivityEntity,
-        VideoActivityEntity,
-        TextActivityEntity,
-        DocActivityEntity,
-      ];
-      console.log('Successfully loaded CourseModule entities from:', basePath);
-      break;
-    } catch (pathError) {
-      console.log('Failed to load from path:', basePath, pathError.message);
-    }
-  }
-
-  CourseModuleEntities = loadedEntities;
-  console.log('Final CourseModule entities:', CourseModuleEntities.map(e => e.name));
-} catch (error) {
-  console.log('CourseModule entities not found, skipping...', error.message);
-}
-
-
-// 配置常量
 const CORE_MODULE_CONFIG = 'CORE_MODULE_CONFIG';
 
 @Module({})
@@ -139,7 +91,7 @@ export class CoreModule implements OnModuleInit {
           }),
           inject: [ConfigService],
         }),
-        TypeOrmModule.forFeature([User, Role, Permission, UserBind, File, Menu, ...CourseModuleEntities]),
+        TypeOrmModule.forFeature([User, Role, Permission, UserBind, File, Menu]),
         JwtModule.register({
           global: true,
           secret: mergedConfig.jwt?.secret || JWT_SECRET,
