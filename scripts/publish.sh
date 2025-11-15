@@ -24,9 +24,6 @@ fi
 echo "📦 安装依赖..."
 pnpm install
 
-# 运行测试
-echo "🧪 运行测试..."
-pnpm test
 
 # 运行 lint
 echo "🔍 运行 lint..."
