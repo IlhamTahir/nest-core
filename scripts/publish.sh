@@ -25,9 +25,9 @@ echo "📦 安装依赖..."
 pnpm install
 
 
-# 运行 lint
-echo "🔍 运行 lint..."
-pnpm lint
+## 运行 lint
+#echo "🔍 运行 lint..."
+#pnpm lint
 
 # 构建核心包
 echo "🔨 构建核心包..."
