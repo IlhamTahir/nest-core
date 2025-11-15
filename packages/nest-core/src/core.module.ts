@@ -23,8 +23,6 @@ import { File } from './entity/file.entity';
 import { UploadManager } from './service/upload-manager';
 import { AwsS3Strategy } from './service/strategy/aws-s3.strategy';
 import { FileMapper } from './mapper/file.mapper';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import * as process from 'node:process';
 import { MenuService } from './service/menu.service';
 import { MenuMapper } from './mapper/menu.mapper';
@@ -33,7 +31,6 @@ import { MenuController } from './controller/menu.controller';
 import { SnowflakeUtil } from './util/snowflake.util';
 import { SwaggerService } from './service/swagger.service';
 import { CoreModuleConfig, mergeCoreConfig } from './config/core.config';
-import { mergeSwaggerConfig } from './config/swagger.config';
 
 const CORE_MODULE_CONFIG = 'CORE_MODULE_CONFIG';
 
@@ -44,12 +41,9 @@ export class CoreModule implements OnModuleInit {
     private readonly userService: UserService,
     private readonly menuService: MenuService,
     private uploadManager: UploadManager,
-    private readonly swaggerService: SwaggerService,
   ) {}
 
-  /**
-   * 创建根模块（推荐使用）
-   */
+
   static forRoot(config?: CoreModuleConfig): DynamicModule {
     const mergedConfig = mergeCoreConfig(config);
 
@@ -99,18 +93,7 @@ export class CoreModule implements OnModuleInit {
             expiresIn: mergedConfig.jwt?.expiresIn || JWT_EXPIRATION,
           },
         }),
-        RequestContextModule,
-        ServeStaticModule.forRoot({
-          rootPath:
-            process.env.NODE_ENV === 'production'
-              ? join(process.cwd(), mergedConfig.upload?.uploadDir || 'uploads')
-              : join(__dirname, '../../', mergedConfig.upload?.uploadDir || 'uploads'),
-          serveRoot: `/${mergedConfig.upload?.uploadDir || 'uploads'}`,
-          serveStaticOptions: {
-            fallthrough: false,
-            index: false,
-          },
-        }),
+        RequestContextModule
       ],
       providers: [
         {
@@ -137,12 +120,7 @@ export class CoreModule implements OnModuleInit {
     };
   }
 
-  /**
-   * 兼容性方法：不带配置的导入方式
-   */
-  static forRootAsync(): DynamicModule {
-    return CoreModule.forRoot();
-  }
+
   async onModuleInit() {
     // 获取配置
     const config = mergeCoreConfig();
@@ -158,18 +136,5 @@ export class CoreModule implements OnModuleInit {
     console.log('Loaded JWT_SECRET:', JWT_SECRET);
 
     this.uploadManager.registerStrategy('s3', new AwsS3Strategy());
-  }
-
-  /**
-   * 设置 Swagger（需要在应用启动后调用）
-   */
-  static setupSwagger(app: any, config?: CoreModuleConfig): void {
-    const mergedConfig = mergeCoreConfig(config);
-    const swaggerConfig = mergeSwaggerConfig(mergedConfig.swagger);
-
-    if (swaggerConfig.enabled) {
-      const swaggerService = app.get(SwaggerService);
-      swaggerService.setupSwagger(app, swaggerConfig);
-    }
   }
 }

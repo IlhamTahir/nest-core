@@ -1,5 +1,11 @@
 # @ilhamtahir/nest-core
 
+## 0.3.4
+
+### Patch Changes
+
+- new
+
 ## 0.3.3
 
 ### Patch Changes
