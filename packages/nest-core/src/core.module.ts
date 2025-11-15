@@ -106,8 +106,10 @@ export class CoreModule implements OnModuleInit {
               ? join(process.cwd(), mergedConfig.upload?.uploadDir || 'uploads')
               : join(__dirname, '../../', mergedConfig.upload?.uploadDir || 'uploads'),
           serveRoot: `/${mergedConfig.upload?.uploadDir || 'uploads'}`,
+          exclude: ['/api*'],
           serveStaticOptions: {
             fallthrough: false,
+            index: false,
           },
         }),
       ],
