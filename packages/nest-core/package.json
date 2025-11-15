@@ -1,6 +1,6 @@
 {
   "name": "@ilhamtahir/nest-core",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "NestJS Core Module - A reusable NestJS module package",
   "author": "IlhamTahir",
   "license": "MIT",
