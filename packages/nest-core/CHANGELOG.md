@@ -1,5 +1,11 @@
 # @ilhamtahir/nest-core
 
+## 0.3.5
+
+### Patch Changes
+
+- 去除static
+
 ## 0.3.4
 
 ### Patch Changes
